@@ -1,0 +1,438 @@
+/* DealsPage.module.css */
+
+.pageWrapper {
+
+  
+  padding-left: 40px;
+  padding-top: 50px;
+  background-color: #EEF1F2;
+  min-height: 100vh;
+  margin-left: 20px;
+  padding-right: 10px;
+  
+  
+}
+
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: white;
+  margin-bottom: 4px;
+  
+  
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.btnGroup {
+  display: flex;
+  gap: 12px;
+}
+
+.importBtn {
+  border: 1px solid #5e4cf3;
+  background: white;
+  color: #5e4cf3;
+  padding: 6px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.createBtn {
+  background: #5e4cf3;
+  color: white;
+  border: none;
+  padding: 6px 25px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* Search and Pagination on the same row */
+.searchPaginationRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.158);
+
+}
+
+.tableCard {
+  background: rgb(255, 255, 255);
+ border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  
+}
+
+/* Table styling to match the image */
+.tableWrapper {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.tableHeader {
+  background-color: #5e4cf3 !important;
+  color: white !important;
+  text-align: left;
+}
+
+.tableHeader th {
+  padding: 12px 15px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tableRow {
+  border-bottom: 1px solid #eee;
+}
+
+.tableRow td {
+  padding: 15px;
+  font-size: 14px;
+  color: #444;
+}
+
+.actionIcons {
+  display: flex;
+  gap: 10px;
+  color: #5e4cf3;
+}
+
+.deleteIcon {
+  color: #dc3545;
+}
+
+
+/* 
+----------------------------- */
+
+
+
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.label span {
+  color: red;
+}
+
+.input, .select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid #eee;
+  background: white;
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #5e4cf3;
+  background: white;
+  color: #5e4cf3;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.saveBtn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #5e4cf3;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ---------------------------------- */
+
+
+/* dealdetails.module.css */
+
+.pageWrapper1 {
+  background-color:#EEF1F2;
+  min-height: 100vh;
+ padding: 40px;
+}
+
+.mainContainer {
+  padding: 1.5rem; 
+  margin-left: 30px;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.infoBox {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.infoText {
+  color: #6c757d;
+  font-size: 0.875rem; 
+  margin-bottom: 0;
+}
+
+/* ------------------------------- */
+
+.iconBtn{
+  border:none;
+  background:none;
+  cursor:pointer;
+}
+
+.deleteIcon{
+ border:none;
+ background:none;
+ cursor:pointer;
+ font-size:16px;
+ color:red;
+}
+
+
+
+
+
+
+
+
+
+
+.iconBtn:hover {
+  transform: scale(1.1);
+}
+
+.deleteIcon:hover {
+  transform: scale(1.1);
+}
+
+
+
+
+
+
+.noteCard {
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modalBox {
+  width: 400px;
+  background: white;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.textarea {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.cancelBtn {
+  background: #eee;
+  border: none;
+  padding: 8px 16px;
+}
+
+.saveBtn {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+}
+/* //------------------------------- */
+
+
+
+
+
+
+/* Wrapper */
+.dateWrapper {
+  position: relative;
+}
+
+/* Input */
+.input {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  outline: none;
+  transition: 0.25s;
+}
+
+.input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+/* Calendar main */
+.calendar {
+  border: none !important;
+  border-radius: 14px !important;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  font-family: inherit;
+}
+
+/* Header */
+.calendar .react-datepicker__header {
+  background: linear-gradient(135deg, #6c63ff, #7c73ff);
+  border-bottom: none;
+  padding: 12px;
+}
+
+/* Month */
+.calendar .react-datepicker__current-month {
+  color: white;
+  font-weight: 600;
+}
+
+/* Days */
+.calendar .react-datepicker__day {
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+/* Hover */
+.calendar .react-datepicker__day:hover {
+  background: #eef2ff;
+  color: #6c63ff;
+}
+
+/* Selected */
+.calendar .react-datepicker__day--selected {
+  background: #6c63ff !important;
+  color: #fff !important;
+}
+
+/* Today */
+.calendar .react-datepicker__day--today {
+  border: 1px solid #6c63ff;
+}
+
+
+
+
+
+/* Red border for invalid fields */
+.errorInput {
+  border: 1px solid #ef4444 !important;
+ 
+}
+
+/* Error text */
+.errorText {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+  display: block;
+  font-weight: 500;
+}
+
+/* Label error highlight */
+.labelError {
+  color: #ef4444;
+}
+
+/* Input focus (error state) */
+.errorInput:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+/* Smooth animation */
+.errorText {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* //------------------------------------------------ */
+

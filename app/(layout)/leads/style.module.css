@@ -1,0 +1,20 @@
+
+body{
+  background-color: lch(94.95% 1.17 226.01);
+}
+
+.container{
+ padding-top: 15px;
+  padding-left: 60px;
+  margin-top: 30px;
+  width: "calc(100% - 75px)"
+}
+
+.Head{
+  border-radius: 10px;
+  background-color: #ffff;
+}
+
+.row:hover{
+  background-color: rgb(238, 238, 238);
+}
