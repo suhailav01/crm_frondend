@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { Button, Form } from "react-bootstrap";
-import { SideModal } from "@/app/(components)/sideModal/page";
+import SideModal from "@/app/(components)/sideModal/page";
 import Notes from "@/app/(activityComponents)/notesTabs/page";
 import { FaSearch } from "react-icons/fa";
 

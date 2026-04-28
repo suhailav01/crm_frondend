@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button, Form, Row, Col } from "react-bootstrap";
-import { SideModal } from "@/app/(components)/sideModal/page";
+import SideModal from "@/app/(components)/sideModal/page";
 import Tasks from "@/app/(activityComponents)/tasksTab/page";
 import { FaSearch } from "react-icons/fa";
 
