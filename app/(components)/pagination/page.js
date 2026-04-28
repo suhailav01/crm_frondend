@@ -1,6 +1,6 @@
 "use client"
 
- const Pagination = ({ current, total, onPageChange }) => {
+ const Pagination = ({ current = 1, total = 1, onPageChange = () => {} }) => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= total) {
       onPageChange(newPage);

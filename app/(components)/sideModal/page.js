@@ -1,11 +1,16 @@
- const SideModal = ({ isOpen, onClose, title, children }) => {
+const SideModal = ({
+  isOpen = false,
+  onClose = () => { },
+  title = "",
+  children = null,
+}) => {
   if (!isOpen) return null;
   return (
     <>
       {/* Overlay */}
-      <div 
-        onClick={onClose} 
-        style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.3)", zIndex: 1040 }} 
+      <div
+        onClick={onClose}
+        style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.3)", zIndex: 1040 }}
       />
       {/* Drawer */}
       <div className="bg-white shadow-lg p-4" style={{ position: "fixed", top: 0, right: 0, width: "400px", height: "100%", zIndex: 1050 }}>

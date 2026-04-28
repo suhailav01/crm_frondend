@@ -1,5 +1,5 @@
- const SearchBar = ({ value, onChange, placeholder = "Search..." }) => (
-  <div className="position-relative" style={{ width: "300px" }}>
+const SearchBar = ({ value = "", onChange = () => {}, placeholder = "Search..." }) => ( 
+   <div className="position-relative" style={{ width: "300px" }}>
     <input
       type="text"
       className="form-control ps-4 bg-light border-0"
