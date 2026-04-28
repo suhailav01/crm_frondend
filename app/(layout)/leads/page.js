@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
-import { DataTable } from "@/app/(components)/dataTable/page";
-import { FilterBar } from "@/app/(components)/filterBar/page";
-import { Pagination } from "@/app/(components)/pagination/page";
-import { SideModal } from "@/app/(components)/sideModal/page";
-import { SearchBar } from "@/app/(components)/searchBar/page";
+import DataTable from "@/app/(components)/dataTable/page";
+import FilterBar from "@/app/(components)/filterBar/page";
+import SearchBar from "@/app/(components)/searchBar/page";
+import Pagination from "@/app/(components)/pagination/page";
+import SideModal from "@/app/(components)/sideModal/page";
 import styles from "./style.module.css";
 import { useRouter } from "next/navigation";
 import { FaEdit, FaTrash } from "react-icons/fa";

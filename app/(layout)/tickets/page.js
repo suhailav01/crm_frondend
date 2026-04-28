@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { SearchBar } from "@/app/(components)/searchBar/page";
-import { SideModal } from "@/app/(components)/sideModal/page";
-import { DataTable } from "@/app/(components)/dataTable/page";
-import { Pagination } from "@/app/(components)/pagination/page";
-import { FilterBar } from "@/app/(components)/filterBar/page";
+import DataTable from "@/app/(components)/dataTable/page";
+import FilterBar from "@/app/(components)/filterBar/page";
+import SearchBar from "@/app/(components)/searchBar/page";
+import Pagination from "@/app/(components)/pagination/page";
+import SideModal from "@/app/(components)/sideModal/page";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import Papa from "papaparse";

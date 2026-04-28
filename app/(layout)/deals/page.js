@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import styles from "../deals/deals.module.css";
 import formStyles from "../deals/deals.module.css";
-import { DataTable } from "../../(components)/dataTable/page";
-import { FilterBar } from "../../(components)/filterBar/page";
-import { SearchBar } from "../../(components)/searchBar/page";
-import { Pagination } from "../../(components)/pagination/page";
-import { SideModal } from "../../(components)/sideModal/page";
+import DataTable from "@/app/(components)/dataTable/page";
+import FilterBar from "@/app/(components)/filterBar/page";
+import SearchBar from "@/app/(components)/searchBar/page";
+import Pagination from "@/app/(components)/pagination/page";
+import SideModal from "@/app/(components)/sideModal/page";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { FiEdit } from "react-icons/fi";
