@@ -33,7 +33,7 @@ const DetailsInfoSidebar = ({
     const fetchUsers = async () => {
       try {
         const res = await fetch(
-          "http://localhost:7000/api/auth/signup/users"
+          "${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup/users"
         );
         const data = await res.json();
 

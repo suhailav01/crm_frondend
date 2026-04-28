@@ -32,7 +32,7 @@ export default function Nav() {
 
         console.log("USER ID:", userId); // ✅ debug
 
-        const res = await fetch("http://localhost:7000/api/auth/signup/users", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -103,7 +103,7 @@ export default function Nav() {
 
         try {
           const res = await fetch(
-            `http://localhost:7000/api/v1/search?query=${encodeURIComponent(search)}`
+            `${process.env.NEXT_PUBLIC_API_URL}/search?query=${encodeURIComponent(search)}`
           );
           const data = await res.json();
 
@@ -185,8 +185,8 @@ export default function Nav() {
   const fetchNotifications = async () => {
     try {
       const [listRes, countRes] = await Promise.all([
-        fetch("http://localhost:7000/api/v1/notifications"),
-        fetch("http://localhost:7000/api/v1/notifications/unread-count"),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/unread-count`)
       ]);
 
       const listData = await listRes.json();
@@ -218,7 +218,7 @@ export default function Nav() {
     try {
       if (!item.is_read) {
         await fetch(
-          `http://localhost:7000/api/v1/notifications/${item.id}/read`,
+          `${process.env.NEXT_PUBLIC_API_URL}/notifications/${item.id}/read`,
           {
             method: "PUT",
           }
@@ -246,7 +246,7 @@ export default function Nav() {
 
   const handleMarkAllRead = async () => {
     try {
-      await fetch("http://localhost:7000/api/v1/notifications/read-all", {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/read-all`, {
         method: "PUT",
       });
       fetchNotifications();
@@ -563,8 +563,7 @@ export default function Nav() {
             >
               {currentUser?.profile_image ? (
                 <img
-                  src={`http://localhost:7000/${currentUser.profile_image}`}
-                  alt="Profile"
+                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${currentUser.profile_image}`} alt="Profile"
                   style={{
                     width: "100%",
                     height: "100%",

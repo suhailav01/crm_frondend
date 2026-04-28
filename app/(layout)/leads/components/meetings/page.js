@@ -6,7 +6,7 @@ import { SideModal } from "@/app/(components)/sideModal/page";
 import Meetings from "@/app/(activityComponents)/meetingsTab/page";
 import { FaSearch } from "react-icons/fa";
 
-const API_BASE_URL = "http://localhost:7000";
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}`;
 
 export default function MeetingsTab({
   leadId,
@@ -45,7 +45,7 @@ export default function MeetingsTab({
     try {
       setLoading(true);
 
-      const res = await fetch(`${API_BASE_URL}/api/v1/lead-meetings/${leadId}`, {
+      const res = await fetch(`${API_BASE_URL}/lead-meetings/${leadId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

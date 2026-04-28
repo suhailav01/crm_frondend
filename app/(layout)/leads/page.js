@@ -32,109 +32,116 @@ export default function LeadsPage() {
     e.target.value = "";
   };
   const importCsv = async (file) => {
-  try {
-    const token = localStorage.getItem("token");
-    setIsImporting(true);
+    try {
+      const token = localStorage.getItem("token");
+      setIsImporting(true);
 
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: async (results) => {
-        try {
-          console.log("CSV DATA:", results.data);
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: async (results) => {
+          try {
+            console.log("CSV DATA:", results.data);
 
-          const rows = results.data || [];
+            const rows = results.data || [];
 
-          if (!rows.length) {
-            toast.error("CSV is empty");
-            setIsImporting(false);
-            return;
-          }
+            if (!rows.length) {
+              toast.error("CSV is empty");
+              setIsImporting(false);
+              return;
+            }
 
-          const formattedLeads = rows
-            .map((row) => {
-              const companyId = row.company_id ? Number(row.company_id) : null;
+            const formattedLeads = rows
+              .map((row) => {
+                const companyId = row.company_id
+                  ? Number(row.company_id)
+                  : null;
 
-              let ownerIds = [];
+                let ownerIds = [];
 
-              if (currentUser?.role === "admin") {
-                ownerIds = row.owners
-                  ? row.owners
-                      .split(",")
-                      .map((id) => id.trim())
-                      .filter(Boolean)
-                  : [];
-              } else if (currentUser?.id) {
-                ownerIds = [String(currentUser.id)];
-              }
+                if (currentUser?.role === "admin") {
+                  ownerIds = row.owners
+                    ? row.owners
+                        .split(",")
+                        .map((id) => id.trim())
+                        .filter(Boolean)
+                    : [];
+                } else if (currentUser?.id) {
+                  ownerIds = [String(currentUser.id)];
+                }
 
-              return {
-                first_name: row.first_name?.trim() || "",
-                last_name: row.last_name?.trim() || "",
-                email: row.email?.trim() || "",
-                phone_number: row.phone_number?.trim() || "",
-                job_title: row.job_title?.trim() || "",
-                city: row.city?.trim() || null,
-                company_id: companyId,
-                status: row.status?.trim() || "New",
-                is_converted: false,
-                owners: ownerIds,
-              };
-            })
-            .filter(
-              (lead) =>
-                lead.first_name &&
-                lead.email &&
-                lead.phone_number &&
-                lead.owners.length > 0
+                return {
+                  first_name: row.first_name?.trim() || "",
+                  last_name: row.last_name?.trim() || "",
+                  email: row.email?.trim() || "",
+                  phone_number: row.phone_number?.trim() || "",
+                  job_title: row.job_title?.trim() || "",
+                  city: row.city?.trim() || null,
+                  company_id: companyId,
+                  status: row.status?.trim() || "New",
+                  is_converted: false,
+                  owners: ownerIds,
+                };
+              })
+              .filter(
+                (lead) =>
+                  lead.first_name &&
+                  lead.email &&
+                  lead.phone_number &&
+                  lead.owners.length > 0,
+              );
+
+            console.log("FORMATTED LEADS:", formattedLeads);
+
+            if (!formattedLeads.length) {
+              toast.error("No valid rows found in CSV");
+              setIsImporting(false);
+              return;
+            }
+
+            const res = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/leads/import`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ leads: formattedLeads }),
+              },
             );
 
-          console.log("FORMATTED LEADS:", formattedLeads);
+            const data = await res.json();
 
-          if (!formattedLeads.length) {
-            toast.error("No valid rows found in CSV");
+            if (!res.ok) {
+              toast.error(data.message || "Import failed");
+              setIsImporting(false);
+              return;
+            }
+
+            toast.success(
+              `Imported ${data.count || formattedLeads.length} leads successfully`,
+            );
+            await fetchLeads();
             setIsImporting(false);
-            return;
-          }
-
-          const res = await fetch("http://localhost:7000/api/v1/leads/import", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ leads: formattedLeads }),
-          });
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            toast.error(data.message || "Import failed");
+          } catch (err) {
+            console.error("IMPORT ERROR:", err);
+            toast.error("Import failed");
             setIsImporting(false);
-            return;
           }
-
-          toast.success(`Imported ${data.count || formattedLeads.length} leads successfully`);
-          await fetchLeads();
+        },
+        error: (err) => {
+          console.error("CSV PARSE ERROR:", err);
+          toast.error("Failed to read CSV");
           setIsImporting(false);
-        } catch (err) {
-          console.error("IMPORT ERROR:", err);
-          toast.error("Import failed");
-          setIsImporting(false);
-        }
-      },
-      error: (err) => {
-        console.error("CSV PARSE ERROR:", err);
-        toast.error("Failed to read CSV");
-        setIsImporting(false);
-      },
-    });
-  } catch (err) {
-    console.error("CSV IMPORT ERROR:", err);
-    toast.error("Import failed");
-    setIsImporting(false);
-  }
-};
+        },
+      });
+    } catch (err) {
+      console.error("CSV IMPORT ERROR:", err);
+      toast.error("Import failed");
+      setIsImporting(false);
+    }
+  };
   useEffect(() => {
     const storedUser =
       typeof window !== "undefined"
@@ -148,13 +155,16 @@ export default function LeadsPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:7000/api/v1/companies", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/companies`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         const data = await res.json();
         console.log("COMPANIES API RESPONSE:", data);
@@ -200,13 +210,16 @@ export default function LeadsPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:7000/api/auth/signup/users", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup/users`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
         const data = await res.json();
 
         if (data.success) {
@@ -220,8 +233,6 @@ export default function LeadsPage() {
     fetchOwners();
   }, []);
 
-
-
   const [editId, setEditId] = useState(null);
   const [formData, setFormData] = useState({
     email: "",
@@ -234,7 +245,7 @@ export default function LeadsPage() {
   });
 
   const [leadsData, setLeadsData] = useState([]);
-  const API_URL = "http://localhost:7000/api/v1/leads";
+  const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/leads`;
   // fetch leads
   const fetchLeads = async () => {
     try {
@@ -270,8 +281,6 @@ export default function LeadsPage() {
     }
   };
 
-
-
   useEffect(() => {
     fetchLeads();
   }, []);
@@ -279,9 +288,11 @@ export default function LeadsPage() {
     let newErrors = {};
 
     if (!formData.email.trim()) newErrors.email = "Email is required";
-    if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First name is required";
     if (!formData.phone.trim()) newErrors.phone = "Phone is required";
-    if (!selectedUsers.length) newErrors.owner = "At least one owner is required";
+    if (!selectedUsers.length)
+      newErrors.owner = "At least one owner is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -382,7 +393,7 @@ export default function LeadsPage() {
     setSelectedUsers(
       currentUser && currentUser.role !== "admin"
         ? [String(currentUser.id)]
-        : (item.user_ids || [])
+        : item.user_ids || [],
     );
     setEditId(item.id);
     setIsModalOpen(true);
@@ -515,7 +526,7 @@ export default function LeadsPage() {
                   setSelectedUsers(
                     currentUser && currentUser.role !== "admin"
                       ? [String(currentUser.id)]
-                      : []
+                      : [],
                   );
                   setErrors({});
                   setIsModalOpen(true);
@@ -820,7 +831,7 @@ export default function LeadsPage() {
                                   setSelectedUsers((prev) => [...prev, userId]);
                                 } else {
                                   setSelectedUsers((prev) =>
-                                    prev.filter((id) => id !== userId)
+                                    prev.filter((id) => id !== userId),
                                   );
                                 }
                               }}

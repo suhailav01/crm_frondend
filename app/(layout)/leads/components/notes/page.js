@@ -5,94 +5,95 @@ import { SideModal } from "@/app/(components)/sideModal/page";
 import Notes from "@/app/(activityComponents)/notesTabs/page";
 import { FaSearch } from "react-icons/fa";
 
-export default function NotesTab({ leadId, searchTerm = "", currentUser }) {  const [isOpen, setIsOpen] = useState(false);
+export default function NotesTab({ leadId, searchTerm = "", currentUser }) {
+  const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState([]);
   const [noteText, setNoteText] = useState("");
   const [attachments, setAttachments] = useState([]);
-const editorRef = useRef(null);
-const fileInputRef = useRef(null);
+  const editorRef = useRef(null);
+  const fileInputRef = useRef(null);
   useEffect(() => {
     if (!leadId) return;
 
- const fetchNotes = async () => {
-  const res = await fetch(
-    `http://localhost:7000/api/v1/leads-notes/${leadId}`
-  );
+    const fetchNotes = async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/leads-notes/${leadId}`
+      );
 
-  const data = await res.json();
+      const data = await res.json();
 
-  setNotes(
-    (data.data || []).map((note) => ({
-      id: note.id,
-      user: note.created_by_name || currentUser?.first_name || "User",
-      text: note.note_text,
-      attachments:
-        typeof note.attachments === "string"
-          ? JSON.parse(note.attachments)
-          : note.attachments || [],
-      date: note.created_at,
-    }))
-  );
-};
+      setNotes(
+        (data.data || []).map((note) => ({
+          id: note.id,
+          user: note.created_by_name || currentUser?.first_name || "User",
+          text: note.note_text,
+          attachments:
+            typeof note.attachments === "string"
+              ? JSON.parse(note.attachments)
+              : note.attachments || [],
+          date: note.created_at,
+        }))
+      );
+    };
 
     fetchNotes();
   }, [leadId]);
 
-const applyFormat = (command) => {
-  editorRef.current?.focus();
+  const applyFormat = (command) => {
+    editorRef.current?.focus();
 
-  if (command === "p") {
-    document.execCommand("formatBlock", false, "p");
-  } else {
-    document.execCommand("formatBlock", false, command);
-  }
-};
+    if (command === "p") {
+      document.execCommand("formatBlock", false, "p");
+    } else {
+      document.execCommand("formatBlock", false, command);
+    }
+  };
 
-const handleSaveNote = async () => {
-  const htmlText = editorRef.current?.innerHTML || "";
+  const handleSaveNote = async () => {
+    const htmlText = editorRef.current?.innerHTML || "";
 
-  if (!htmlText.replace(/<[^>]*>/g, "").trim()) return;
+    if (!htmlText.replace(/<[^>]*>/g, "").trim()) return;
 
-  const formData = new FormData();
-  formData.append("lead_id", leadId);
-  formData.append("note_text", htmlText);
- formData.append("created_by", currentUser?.id);
+    const formData = new FormData();
+    formData.append("lead_id", leadId);
+    formData.append("note_text", htmlText);
+    formData.append("created_by", currentUser?.id);
 
-  attachments.forEach((file) => {
-    formData.append("attachments", file);
-  });
-
-  try {
-    const res = await fetch("http://localhost:7000/api/v1/leads-notes", {
-      method: "POST",
-      body: formData,
+    attachments.forEach((file) => {
+      formData.append("attachments", file);
     });
 
-    const newNote = await res.json();
-    const created = newNote.data || newNote;
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads-notes`, {
+        method: "POST",
+        body: formData,
+      });
 
-    setNotes((prev) => [
-      {
-        id: created.id,
-        user: created.created_by_name || currentUser?.first_name || "User",
-        text: created.note_text,
-        attachments:
-          typeof created.attachments === "string"
-            ? JSON.parse(created.attachments)
-            : created.attachments || [],
-        date: created.created_at || new Date().toLocaleString(),
-      },
-      ...prev,
-    ]);
+      const newNote = await res.json();
+      const created = newNote.data || newNote;
 
-    setNoteText("");
-    setAttachments([]);
-    if (editorRef.current) editorRef.current.innerHTML = "";
-    setIsOpen(false);
-  } catch (error) {
-    console.error("Save error:", error);
-  }
-};
+      setNotes((prev) => [
+        {
+          id: created.id,
+          user: created.created_by_name || currentUser?.first_name || "User",
+          text: created.note_text,
+          attachments:
+            typeof created.attachments === "string"
+              ? JSON.parse(created.attachments)
+              : created.attachments || [],
+          date: created.created_at || new Date().toLocaleString(),
+        },
+        ...prev,
+      ]);
+
+      setNoteText("");
+      setAttachments([]);
+      if (editorRef.current) editorRef.current.innerHTML = "";
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Save error:", error);
+    }
+  };
   const filteredNotes = (notes || []).filter((item) =>
     item?.text?.toLowerCase()?.includes(searchTerm.toLowerCase()),
   );
@@ -126,10 +127,10 @@ const handleSaveNote = async () => {
         }}
       >
         <div className="p-0"
-         style={{
-    maxHeight: "450px",  
-    overflowY: "auto"
-  }}>
+          style={{
+            maxHeight: "450px",
+            overflowY: "auto"
+          }}>
           {/*  NO RESULTS UI */}
 
           {isSearching && filteredNotes.length === 0 ? (
@@ -196,20 +197,20 @@ const handleSaveNote = async () => {
                   color: "#6c757d",
                 }}
               >
-<select
-  onChange={(e) => applyFormat(e.target.value)}
-  style={{
-    border: "none",
-    background: "transparent",
-    fontSize: "12px",
-    cursor: "pointer"
-  }}
->
-  <option value="p">Normal text</option>
-  <option value="h1">Heading 1</option>
-  <option value="h2">Heading 2</option>
-  <option value="h3">Heading 3</option>
-</select>
+                <select
+                  onChange={(e) => applyFormat(e.target.value)}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    fontSize: "12px",
+                    cursor: "pointer"
+                  }}
+                >
+                  <option value="p">Normal text</option>
+                  <option value="h1">Heading 1</option>
+                  <option value="h2">Heading 2</option>
+                  <option value="h3">Heading 3</option>
+                </select>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <span
                     style={{ fontWeight: "bold", cursor: "pointer" }}
@@ -231,31 +232,31 @@ const handleSaveNote = async () => {
                   </span>
                 </div>
 
-              <div style={{ display: "flex", gap: "10px" }}>
-  <span
-    style={{ cursor: "pointer", userSelect: "none" }}
-    onClick={() => applyFormat("insertUnorderedList")}
-    title="Bullet List"
-  >
-    ≡
-  </span>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <span
+                    style={{ cursor: "pointer", userSelect: "none" }}
+                    onClick={() => applyFormat("insertUnorderedList")}
+                    title="Bullet List"
+                  >
+                    ≡
+                  </span>
 
-  <span
-    style={{ cursor: "pointer", userSelect: "none" }}
-    onClick={() => applyFormat("insertOrderedList")}
-    title="Numbered List"
-  >
-    ≣
-  </span>
+                  <span
+                    style={{ cursor: "pointer", userSelect: "none" }}
+                    onClick={() => applyFormat("insertOrderedList")}
+                    title="Numbered List"
+                  >
+                    ≣
+                  </span>
 
-  <span
-    style={{ cursor: "pointer", userSelect: "none" }}
-    onClick={() => fileInputRef.current?.click()}
-    title="Add Image"
-  >
-    🖼️
-  </span>
-</div>
+                  <span
+                    style={{ cursor: "pointer", userSelect: "none" }}
+                    onClick={() => fileInputRef.current?.click()}
+                    title="Add Image"
+                  >
+                    🖼️
+                  </span>
+                </div>
               </div>
               <input
                 type="file"
@@ -267,109 +268,109 @@ const handleSaveNote = async () => {
                 }
               />
               {/* Textarea */}
-           <div
-  ref={editorRef}
-  contentEditable
-  suppressContentEditableWarning={true}
-  onInput={(e) => setNoteText(e.currentTarget.innerHTML)}
-  data-placeholder="Enter"
-  style={{
-    minHeight: "180px",
-    padding: "12px",
-    outline: "none",
-    fontSize: "0.9rem",
-    lineHeight: "1.6",
-  }}
-/>
-{attachments.length > 0 && (
-  <div
-    style={{
-      marginTop: "12px",
-      padding: "12px",
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fill, minmax(64px, 1fr))",
-      gap: "10px",
-      width: "100%",
-      maxHeight: "160px",
-      overflowY: "auto",
-      borderTop: "1px solid #eee",
-    }}
-  >
-    {attachments.map((file, index) => (
-      <div
-        key={index}
-        style={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: "1 / 1",
-          borderRadius: "10px",
-          overflow: "hidden",
-          border: "1px solid #ddd",
-          background: "#f8f9fa",
-          minWidth: "64px",
-          maxWidth: "80px",
-        }}
-      >
-        {file.type.startsWith("image") ? (
-          <img
-            src={URL.createObjectURL(file)}
-            alt={`attachment-${index}`}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              fontSize: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              padding: "6px",
-              color: "#555",
-              background: "#fff",
-            }}
-          >
-            {file.name.slice(0, 10)}
-          </div>
-        )}
+              <div
+                ref={editorRef}
+                contentEditable
+                suppressContentEditableWarning={true}
+                onInput={(e) => setNoteText(e.currentTarget.innerHTML)}
+                data-placeholder="Enter"
+                style={{
+                  minHeight: "180px",
+                  padding: "12px",
+                  outline: "none",
+                  fontSize: "0.9rem",
+                  lineHeight: "1.6",
+                }}
+              />
+              {attachments.length > 0 && (
+                <div
+                  style={{
+                    marginTop: "12px",
+                    padding: "12px",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(64px, 1fr))",
+                    gap: "10px",
+                    width: "100%",
+                    maxHeight: "160px",
+                    overflowY: "auto",
+                    borderTop: "1px solid #eee",
+                  }}
+                >
+                  {attachments.map((file, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        position: "relative",
+                        width: "100%",
+                        aspectRatio: "1 / 1",
+                        borderRadius: "10px",
+                        overflow: "hidden",
+                        border: "1px solid #ddd",
+                        background: "#f8f9fa",
+                        minWidth: "64px",
+                        maxWidth: "80px",
+                      }}
+                    >
+                      {file.type.startsWith("image") ? (
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`attachment-${index}`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            display: "block",
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            fontSize: "10px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            textAlign: "center",
+                            padding: "6px",
+                            color: "#555",
+                            background: "#fff",
+                          }}
+                        >
+                          {file.name.slice(0, 10)}
+                        </div>
+                      )}
 
-        <button
-          type="button"
-          onClick={() =>
-            setAttachments((prev) => prev.filter((_, i) => i !== index))
-          }
-          style={{
-            position: "absolute",
-            top: "4px",
-            right: "4px",
-            width: "18px",
-            height: "18px",
-            border: "none",
-            borderRadius: "50%",
-            background: "rgba(0,0,0,0.65)",
-            color: "#fff",
-            fontSize: "12px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            zIndex: 2,
-            lineHeight: 1,
-          }}
-        >
-          ×
-        </button>
-      </div>
-    ))}
-  </div>
-)}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setAttachments((prev) => prev.filter((_, i) => i !== index))
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "4px",
+                          right: "4px",
+                          width: "18px",
+                          height: "18px",
+                          border: "none",
+                          borderRadius: "50%",
+                          background: "rgba(0,0,0,0.65)",
+                          color: "#fff",
+                          fontSize: "12px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          zIndex: 2,
+                          lineHeight: 1,
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </Form.Group>
 

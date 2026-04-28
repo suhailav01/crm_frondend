@@ -118,7 +118,7 @@ export default function DealsPage() {
               return;
             }
 
-            const res = await fetch("http://localhost:7000/api/v1/deals/import", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deals/import`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -201,7 +201,7 @@ export default function DealsPage() {
   const fetchDeals = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:7000/api/v1/deals", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deals`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -223,7 +223,7 @@ export default function DealsPage() {
     const fetchQualifiedLeads = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:7000/api/v1/leads", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -251,7 +251,7 @@ export default function DealsPage() {
     const fetchOwners = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:7000/api/auth/signup/users", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -353,8 +353,8 @@ export default function DealsPage() {
       console.log("DEAL SAVE PAYLOAD:", payload);
 
       const url = editingId
-        ? `http://localhost:7000/api/v1/deals/${editingId}`
-        : "http://localhost:7000/api/v1/deals";
+        ? `${process.env.NEXT_PUBLIC_API_URL}/deals/${editingId}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/deals`;
       const method = editingId ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
@@ -413,7 +413,7 @@ const handleDelete = async (id) => {
   try {
     const token = localStorage.getItem("token");
 
-    const res = await fetch(`http://localhost:7000/api/v1/deals/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deals/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

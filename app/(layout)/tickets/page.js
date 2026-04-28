@@ -94,7 +94,7 @@ export default function TicketsPage() {
               return;
             }
 
-            const res = await fetch("http://localhost:7000/api/v1/tickets/import", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/import`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -143,7 +143,7 @@ export default function TicketsPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:7000/api/v1/deals", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deals`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -172,7 +172,7 @@ export default function TicketsPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:7000/api/v1/companies", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/companies`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -208,7 +208,7 @@ export default function TicketsPage() {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:7000/api/auth/signup/users", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -248,7 +248,7 @@ export default function TicketsPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:7000/api/v1/tickets", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -446,7 +446,7 @@ export default function TicketsPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:7000/api/v1/tickets/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -514,7 +514,7 @@ export default function TicketsPage() {
       let saveRes;
 
       if (editingId) {
-        saveRes = await fetch(`http://localhost:7000/api/v1/tickets/${editingId}`, {
+        saveRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${editingId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -523,7 +523,7 @@ export default function TicketsPage() {
           body: JSON.stringify(payload),
         });
       } else {
-        saveRes = await fetch("http://localhost:7000/api/v1/tickets", {
+        saveRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -540,7 +540,7 @@ export default function TicketsPage() {
         throw new Error(saveData?.message || "Save failed");
       }
 
-      const res = await fetch("http://localhost:7000/api/v1/tickets", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
