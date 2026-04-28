@@ -1,4 +1,4 @@
-export const DataTable = ({ headers, data, renderRow }) => {
+export default function DataTable({ headers, data, renderRow }) {
   const headerStyle = { 
     backgroundColor: "#5e4cf3", 
     color: "white", 

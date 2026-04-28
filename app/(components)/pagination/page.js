@@ -1,6 +1,6 @@
 "use client"
 
-export const Pagination = ({ current, total, onPageChange }) => {
+ const Pagination = ({ current, total, onPageChange }) => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= total) {
       onPageChange(newPage);
@@ -43,3 +43,4 @@ export const Pagination = ({ current, total, onPageChange }) => {
 };
 
 
+export default Pagination;

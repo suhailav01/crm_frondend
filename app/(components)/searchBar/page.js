@@ -1,4 +1,4 @@
-export const SearchBar = ({ value, onChange, placeholder = "Search..." }) => (
+ const SearchBar = ({ value, onChange, placeholder = "Search..." }) => (
   <div className="position-relative" style={{ width: "300px" }}>
     <input
       type="text"
@@ -10,3 +10,5 @@ export const SearchBar = ({ value, onChange, placeholder = "Search..." }) => (
     />
   </div>
 );
+
+export default SearchBar;

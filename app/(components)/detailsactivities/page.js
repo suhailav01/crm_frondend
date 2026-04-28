@@ -3,7 +3,7 @@ import { Nav, Card, Form } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { useState } from "react";
 
-const DetailsActivities = ({ activities = [] }) => {
+export default function DetailsActivities({ activities = [] }) {
   const tabs = ["Activity", "Notes", "Emails", "Calls", "Tasks", "Meetings"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [search, setSearch] = useState("");
@@ -40,8 +40,8 @@ const DetailsActivities = ({ activities = [] }) => {
       >
         {tabs.map((tab, i) => (
           <Nav.Item key={i}>
-            <Nav.Link 
-              eventKey={tab} 
+            <Nav.Link
+              eventKey={tab}
               className={`px-0 border-0 fw-bold ${activeTab === tab ? "text-primary border-bottom border-primary border-3" : "text-muted"}`}
               style={{ fontSize: "14px", background: "transparent" }}
             >
@@ -65,7 +65,7 @@ const DetailsActivities = ({ activities = [] }) => {
                     {activity.title}
                   </h6>
                 )}
-                
+
                 {/* Description*/}
                 <p className="mb-0 text-muted" style={{ fontSize: "13px", lineHeight: "1.5" }}>
                   {activity.description}
@@ -84,4 +84,3 @@ const DetailsActivities = ({ activities = [] }) => {
   );
 };
 
-export default DetailsActivities;

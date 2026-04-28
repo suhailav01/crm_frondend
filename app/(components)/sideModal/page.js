@@ -1,4 +1,4 @@
-export const SideModal = ({ isOpen, onClose, title, children }) => {
+ const SideModal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
   return (
     <>
@@ -18,3 +18,4 @@ export const SideModal = ({ isOpen, onClose, title, children }) => {
     </>
   );
 };
+export default SideModal;
