@@ -1,3 +1,5 @@
+ 
+ "use client";
  const FilterBar = ({ filters = []}) => (
   <div className="d-flex gap-2 mb-4">
     {filters.map((filter, index) => (

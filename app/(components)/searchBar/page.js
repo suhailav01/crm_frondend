@@ -1,3 +1,4 @@
+"use client";
 const SearchBar = ({ value = "", onChange = () => {}, placeholder = "Search..." }) => ( 
    <div className="position-relative" style={{ width: "300px" }}>
     <input

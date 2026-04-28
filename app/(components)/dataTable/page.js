@@ -1,3 +1,4 @@
+"use client";
 const DataTable = ({ headers = [], data = [], renderRow = () => null }) => {
   const headerStyle = {
     backgroundColor: "#5e4cf3",
