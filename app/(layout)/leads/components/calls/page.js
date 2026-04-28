@@ -18,7 +18,7 @@ export default function CallsTab({ searchTerm, leadId, lead }) {
   const [callDuration, setCallDuration] = useState(0);
 
 
-  const API = "http://localhost:7000";
+  const API = `${process.env.NEXT_PUBLIC_API_URL}`;
 
   // ✅ FETCH CALLS
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function CallsTab({ searchTerm, leadId, lead }) {
 
     const fetchCalls = async () => {
       try {
-      const res = await fetch(`${API}/api/v1/lead-calls/${leadId}`);
+      const res = await fetch(`${API}/lead-calls/${leadId}`);
           const result = await res.json();
 
         if (res.ok) {
@@ -77,7 +77,7 @@ const handleSave = async () => {
       note: note || ""
     };
 
-    const res = await fetch(`${API}/api/v1/lead-calls`, {
+    const res = await fetch(`${API}/lead-calls`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -136,7 +136,7 @@ const handleMakePhoneCall = async () => {
       return;
     }
 
-    const res = await fetch(`${API}/api/v1/lead-calls/make-call`, {
+    const res = await fetch(`${API}/lead-calls/make-call`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -173,7 +173,7 @@ const handleMakePhoneCall = async () => {
 };
 const handleEndCall = async (callSid) => {
   try {
-    const res = await fetch(`${API}/api/v1/lead-calls/end-call/${callSid}`, {
+    const res = await fetch(`${API}/lead-calls/end-call/${callSid}`, {
       method: "POST",
     });
 

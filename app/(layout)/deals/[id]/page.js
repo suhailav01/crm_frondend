@@ -40,7 +40,7 @@ export default function DealDetails() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch(`http://localhost:7000/api/v1/deals/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deals/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -65,25 +65,25 @@ export default function DealDetails() {
   //-----------------------------------------------------------------------
 
   //  CREATE NOTE
- const fetchNotes = async () => {
-  try {
-    const res = await fetch(`http://localhost:7000/api/v1/deal/notes/${id}`);
-    const result = await res.json();
+  const fetchNotes = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deal/notes/${id}`);
+      const result = await res.json();
 
-    if (result.success) {
-      const formatted = result.data.map((note) => ({
-        id: note.id,
-         text: note.note_text, // 🔥 FIX
-        user: note.created_by_name || "User", // 🔥 FIX
-        created_at: note.created_at,
-      }));
+      if (result.success) {
+        const formatted = result.data.map((note) => ({
+          id: note.id,
+          text: note.note_text, // 🔥 FIX
+          user: note.created_by_name || "User", // 🔥 FIX
+          created_at: note.created_at,
+        }));
 
-      setNotes(formatted);
+        setNotes(formatted);
+      }
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
-  }
-};
+  };
 
 
 
@@ -95,7 +95,7 @@ export default function DealDetails() {
     if (!newNote.trim()) return;
 
     try {
-      const res = await fetch("http://localhost:7000/api/v1/deal/notes", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deal/notes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,16 +108,16 @@ export default function DealDetails() {
 
       const result = await res.json();
 
-     if (result.success) {
-  setNotes((prev) => [result.data, ...prev]); // 🔥 instant UI update
+      if (result.success) {
+        setNotes((prev) => [result.data, ...prev]); // 🔥 instant UI update
 
-  await fetchNotes(); // optional (sync with DB)
+        await fetchNotes(); // optional (sync with DB)
 
-  fetchActivities();
+        fetchActivities();
 
-  setNewNote("");
-  setShowNoteModal(false);
-}
+        setNewNote("");
+        setShowNoteModal(false);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -131,7 +131,7 @@ export default function DealDetails() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:7000/api/v1/deal/emails", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deal/emails`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -182,7 +182,7 @@ export default function DealDetails() {
     const fetchEmails = async () => {
       try {
         const res = await fetch(
-          `http://localhost:7000/api/v1/deal/emails/${dealId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/deal/emails/${dealId}`,
         );
 
         const result = await res.json();
@@ -227,7 +227,7 @@ export default function DealDetails() {
   const fetchCalls = async () => {
     try {
       const res = await fetch(
-        `http://localhost:7000/api/v1/deal/calls/${dealId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deal/calls/${dealId}`,
       );
       const data = await res.json();
 
@@ -258,60 +258,60 @@ export default function DealDetails() {
 
   const handleMakeCall = async () => {
 
- const phone =
-  dealData?.owners?.[0]?.phone_number ||
-  dealData?.lead_phone_number;
+    const phone =
+      dealData?.owners?.[0]?.phone_number ||
+      dealData?.lead_phone_number;
 
-  if (!phone) {
-    toast.error("Owner phone number missing ❌");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    setShowCallingModal(true);
-    setCallStatus("calling");
-    setCallDuration(0);
-
-    const res = await fetch(
-      "http://localhost:7000/api/v1/deal/calls/make-call",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          deal_id: dealId,
-          customer_phone: phone, // 🔥 owner phone
-          created_by: 1,
-        }),
-      }
-    );
-
-    const data = await res.json();
-
-    if (data.success) {
-      setCurrentCallSid(data.data.twilio_sid);
-      setCallStatus("initiated");
-      pollCallStatus();
-    } else {
-      setCallStatus("failed");
+    if (!phone) {
+      toast.error("Owner phone number missing ❌");
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    setCallStatus("failed");
-  } finally {
-    setLoading(false);
-  }
-};
+
+    try {
+      setLoading(true);
+
+      setShowCallingModal(true);
+      setCallStatus("calling");
+      setCallDuration(0);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/deal/calls/make-call`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            deal_id: dealId,
+            customer_phone: phone, // 🔥 owner phone
+            created_by: 1,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.success) {
+        setCurrentCallSid(data.data.twilio_sid);
+        setCallStatus("initiated");
+        pollCallStatus();
+      } else {
+        setCallStatus("failed");
+      }
+    } catch (err) {
+      console.error(err);
+      setCallStatus("failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
 
 
   const handleLogCall = async () => {
     try {
-      const res = await fetch("http://localhost:7000/api/v1/deal/calls", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deal/calls`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -349,7 +349,7 @@ export default function DealDetails() {
 
     try {
       await fetch(
-        `http://localhost:7000/api/v1/deal/calls/end-call/${currentCallSid}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deal/calls/end-call/${currentCallSid}`,
         {
           method: "POST",
         },
@@ -381,62 +381,62 @@ export default function DealDetails() {
   const [attachments, setAttachments] = useState([]);
 
 
-const handleFileChange = async (e) => {
-  const files = Array.from(e.target.files);
-  if (!files.length) return;
+  const handleFileChange = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
 
-  const newFiles = files.map((file) => ({
-    file,
-    preview: URL.createObjectURL(file),
-    type: file.type,
-  }));
+    const newFiles = files.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+      type: file.type,
+    }));
 
-  setAttachments((prev) => [...prev, ...newFiles]);
+    setAttachments((prev) => [...prev, ...newFiles]);
 
-  for (let file of files) {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("deal_id", dealId);
-    formData.append("uploaded_by", 1); // 🔥 FIX
+    for (let file of files) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("deal_id", dealId);
+      formData.append("uploaded_by", 1); // 🔥 FIX
 
-    try {
-      const res = await fetch(
-        "http://localhost:7000/api/v1/deal/attachments/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      let data = {};
       try {
-        data = await res.json();
-      } catch {}
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/deal/attachments/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
-      if (!res.ok || !data) {
-  throw new Error(data?.message || "Upload failed");
-}
+        let data = {};
+        try {
+          data = await res.json();
+        } catch { }
 
-      toast.success(file.name + " uploaded ✅");
-    } catch (err) {
-      console.error("UPLOAD ERROR:", err);
-      toast.error(file.name + " failed ❌");
+        if (!res.ok || !data) {
+          throw new Error(data?.message || "Upload failed");
+        }
+
+        toast.success(file.name + " uploaded ✅");
+      } catch (err) {
+        console.error("UPLOAD ERROR:", err);
+        toast.error(file.name + " failed ❌");
+      }
     }
-  }
 
-  e.target.value = "";
-};
+    e.target.value = "";
+  };
 
 
- const handleAddClick = () => {
-  fileInputRef.current.click();
-};
+  const handleAddClick = () => {
+    fileInputRef.current.click();
+  };
 
   //-----------------------------------------------------------------------
   const [allActivities, setAllActivities] = useState([]);
 
   const fetchActivities = async () => {
-    const res = await fetch(`http://localhost:7000/api/v1/deal/activity/${id}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deal/activity/${id}`);
     const data = await res.json();
 
     if (data.success) {
@@ -504,7 +504,7 @@ const handleFileChange = async (e) => {
 
   const handleSaveTask = async () => {
     try {
-      const res = await fetch("http://localhost:7000/api/v1/deal/tasks", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deal/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -542,7 +542,7 @@ const handleFileChange = async (e) => {
   const fetchTasks = async () => {
     try {
       const res = await fetch(
-        `http://localhost:7000/api/v1/deal/tasks/${dealId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deal/tasks/${dealId}`,
       );
       const data = await res.json();
 
@@ -563,7 +563,7 @@ const handleFileChange = async (e) => {
   const fetchMeetings = async () => {
     try {
       const res = await fetch(
-        `http://localhost:7000/api/v1/deal/meetings/${dealId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deal/meetings/${dealId}`,
       );
 
       const data = await res.json();
@@ -595,7 +595,7 @@ const handleFileChange = async (e) => {
   //-----------------------------------------------------------------------------------
   const handleUpdateDeal = async (updatedData) => {
     try {
-      const res = await fetch(`http://localhost:7000/api/v1/deals/${dealId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deals/${dealId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -710,7 +710,7 @@ const handleFileChange = async (e) => {
   };
 
   //------------------------------------------------
-   console.log("DEAL OWNER DATA:", dealData?.owners);
+  console.log("DEAL OWNER DATA:", dealData?.owners);
   return (
     <div className={styles.pageWrapper1}>
       <Toaster position="top-right" />
@@ -1535,20 +1535,20 @@ const handleFileChange = async (e) => {
         onClose={() => setShowTaskModal(false)}
         title="Create Task"
         onSave={async () => {
-         if (
-  !taskForm.task_name ||
-  !taskForm.due_date ||
-  !taskForm.due_time ||
-  !taskForm.task_type ||
-  !taskForm.priority ||
-  !taskForm.assigned_to
-) {
-  alert("Please fill all required fields");
-  return;
-}
+          if (
+            !taskForm.task_name ||
+            !taskForm.due_date ||
+            !taskForm.due_time ||
+            !taskForm.task_type ||
+            !taskForm.priority ||
+            !taskForm.assigned_to
+          ) {
+            alert("Please fill all required fields");
+            return;
+          }
 
           try {
-            const res = await fetch("http://localhost:7000/api/v1/deal/tasks", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deal/tasks`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -1560,7 +1560,7 @@ const handleFileChange = async (e) => {
                 due_time: taskForm.due_time,
                 task_type: taskForm.task_type,
                 priority: taskForm.priority,
-                 assigned_to: Number(taskForm.assigned_to), // 🔥 important
+                assigned_to: Number(taskForm.assigned_to), // 🔥 important
                 note: taskForm.note,
                 created_by: 1, // login user id
               }),
@@ -1577,14 +1577,14 @@ const handleFileChange = async (e) => {
             fetchTasks();
 
             setTaskForm({
-  task_name: "",
-  due_date: "",
-  due_time: "",
-  task_type: "",
-  priority: "",
-  assigned_to: "",
-  note: "",
-});
+              task_name: "",
+              due_date: "",
+              due_time: "",
+              task_type: "",
+              priority: "",
+              assigned_to: "",
+              note: "",
+            });
 
             setShowTaskModal(false);
           } catch (err) {
@@ -1680,30 +1680,30 @@ const handleFileChange = async (e) => {
 
 
           <div>
-  <label style={{ fontSize: "12px", fontWeight: "600" }}>
-    Assigned to *
-  </label>
+            <label style={{ fontSize: "12px", fontWeight: "600" }}>
+              Assigned to *
+            </label>
 
-  <select
-    value={taskForm.assigned_to}
-    onChange={(e) =>
-      setTaskForm({ ...taskForm, assigned_to: e.target.value })
-    }
-    style={inputStyle}
-  >
-    <option value="">Choose</option>
+            <select
+              value={taskForm.assigned_to}
+              onChange={(e) =>
+                setTaskForm({ ...taskForm, assigned_to: e.target.value })
+              }
+              style={inputStyle}
+            >
+              <option value="">Choose</option>
 
-    {dealData?.owners?.length > 0 ? (
-      dealData.owners.map((owner) => (
-        <option key={owner.id} value={owner.id}>
-          {owner.first_name} {owner.last_name}
-        </option>
-      ))
-    ) : (
-      <option disabled>No Owners Found</option>
-    )}
-  </select>
-</div>
+              {dealData?.owners?.length > 0 ? (
+                dealData.owners.map((owner) => (
+                  <option key={owner.id} value={owner.id}>
+                    {owner.first_name} {owner.last_name}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No Owners Found</option>
+              )}
+            </select>
+          </div>
 
 
 
@@ -1742,7 +1742,7 @@ const handleFileChange = async (e) => {
 
           try {
             const res = await fetch(
-              "http://localhost:7000/api/v1/deal/meetings",
+              `${process.env.NEXT_PUBLIC_API_URL}/deal/meetings`,
               {
                 method: "POST",
                 headers: {

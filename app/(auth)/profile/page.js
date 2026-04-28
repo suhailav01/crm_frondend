@@ -14,7 +14,7 @@ export default function ProfilePage() {
     const [imagePreview, setImagePreview] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const API = "http://localhost:7000";
+    const API = "${process.env.NEXT_PUBLIC_API_URL}";
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");

@@ -34,7 +34,7 @@ export default function Dashboard() {
       setAuthorized(true);
 
       try {
-        const res = await fetch("http://localhost:7000/api/v1/dashboard", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

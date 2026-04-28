@@ -19,7 +19,7 @@ export default function companiesDetailsPage() {
   const { id } = useParams();
 
 
-  const API = "http://localhost:7000/api/v1/companies";
+  const API = `${process.env.NEXT_PUBLIC_API_URL}/companies`;
   const [activeTab, setActiveTab] = useState("Activity");
   const [attachments, setAttachments] = useState([]);
   const fileInputRef = useRef(null);
@@ -45,7 +45,7 @@ export default function companiesDetailsPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:7000/api/auth/signup/users", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -187,7 +187,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        "http://localhost:7000/api/v1/company/meetings",
+        `${process.env.NEXT_PUBLIC_API_URL}/company/meetings`,
         {
           method: "POST",
           headers: {
@@ -241,7 +241,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://localhost:7000/api/v1/company/meetings/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/company/meetings/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -286,7 +286,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://localhost:7000/api/v1/company/notes/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/company/notes/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -327,7 +327,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        "http://localhost:7000/api/v1/company/notes",
+        `${process.env.NEXT_PUBLIC_API_URL}/company/notes`,
         {
           method: "POST",
           headers: {
@@ -382,7 +382,7 @@ export default function companiesDetailsPage() {
       }
 
       const res = await fetch(
-        "http://localhost:7000/api/v1/company/emails",
+        `${process.env.NEXT_PUBLIC_API_URL}/company/emails`,
         {
           method: "POST",
           headers: {
@@ -430,7 +430,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://localhost:7000/api/v1/company/emails/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/company/emails/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -473,7 +473,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        "http://localhost:7000/api/v1/company/calls",
+        `${process.env.NEXT_PUBLIC_API_URL}/company/calls`,
         {
           method: "POST",
           headers: {
@@ -521,7 +521,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://localhost:7000/api/v1/company/calls/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/company/calls/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -583,7 +583,7 @@ export default function companiesDetailsPage() {
         return;
       }
 
-      const res = await fetch("http://localhost:7000/api/v1/company/tasks", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -631,7 +631,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://localhost:7000/api/v1/company/tasks/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/company/tasks/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -688,7 +688,7 @@ export default function companiesDetailsPage() {
         formData.append("uploaded_by", currentUser.id);
 
         const res = await fetch(
-          "http://localhost:7000/api/v1/company/attachments/upload",
+          `${process.env.NEXT_PUBLIC_API_URL}/company/attachments/upload`,
           {
             method: "POST",
             headers: {
@@ -723,7 +723,7 @@ export default function companiesDetailsPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://localhost:7000/api/v1/company/attachments/company/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/company/attachments/company/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -758,7 +758,7 @@ export default function companiesDetailsPage() {
   const handleDeleteAttachments = async (fileId) => {
     try {
       await fetch(
-        `http://localhost:7000/api/v1/company/attachments/${fileId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/company/attachments/${fileId}`,
         {
           method: "DELETE",
           headers: {
@@ -836,7 +836,7 @@ export default function companiesDetailsPage() {
       setLiveCallStatus("calling");
       setLiveCallDuration(0);
 
-      const res = await fetch("http://localhost:7000/api/v1/company/calls/make-call", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/calls/make-call`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -878,7 +878,7 @@ export default function companiesDetailsPage() {
       if (!liveCallSid) return;
 
       const res = await fetch(
-        `http://localhost:7000/api/v1/calls/end-call/${liveCallSid}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/calls/end-call/${liveCallSid}`,
         {
           method: "POST",
           headers: {
@@ -2255,7 +2255,7 @@ export default function companiesDetailsPage() {
           {attachments.map((file) => (
             <div key={file.id}>
               <a
-                href={`http://localhost:7000/${file.file_path}`}
+                href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${file.file_path}`}
                 target="_blank"
                 rel="noreferrer"
               >

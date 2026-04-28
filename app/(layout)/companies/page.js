@@ -85,7 +85,7 @@ export default function Page() {
               return;
             }
 
-            const res = await fetch("http://localhost:7000/api/v1/companies/import", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/companies/import`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -142,7 +142,7 @@ export default function Page() {
   };
   const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
-  const API = "http://localhost:7000/api/v1/companies";
+  const API = `${process.env.NEXT_PUBLIC_API_URL}/companies`;
   const fetchCompanies = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -205,7 +205,7 @@ export default function Page() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:7000/api/auth/signup/users", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup/users`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -25,7 +25,7 @@ export default function TicketDetailsPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:7000/api/auth/signup/users");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup/users`);
         const data = await res.json();
 
         const usersArray = Array.isArray(data.data) ? data.data : [];
@@ -65,7 +65,7 @@ export default function TicketDetailsPage() {
 
       try {
         const res = await fetch(
-          "http://localhost:7000/api/attachments/upload",
+          `${process.env.NEXT_PUBLIC_API_URL}/api/attachments/upload`,
           {
             method: "POST",
             body: formData,
@@ -84,7 +84,7 @@ export default function TicketDetailsPage() {
   useEffect(() => {
     const fetchAttachments = async () => {
       const res = await fetch(
-        `http://localhost:7000/api/attachments/ticket/${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/attachments/ticket/${id}`
       );
       const data = await res.json();
       setAttachments(data);
@@ -155,7 +155,7 @@ export default function TicketDetailsPage() {
     const fetchTicket = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://localhost:7000/api/v1/tickets/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${id}`, {
           method: "GET",
           headers: {
             "content-type": "application/json",
@@ -191,7 +191,7 @@ export default function TicketDetailsPage() {
   }, [id]);
   const fetchNotes = async () => {
     try {
-      const res = await fetch(`http://localhost:7000/api/v1/notes/${id}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notes/${id}`);
       const data = await res.json();
 
       if (data.success) {
@@ -210,7 +210,7 @@ export default function TicketDetailsPage() {
 
   const fetchEmails = async () => {
     try {
-      const res = await fetch(`http://localhost:7000/api/v1/emails/${id}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/emails/${id}`);
       const data = await res.json();
 
       if (data.success) {
@@ -231,7 +231,7 @@ export default function TicketDetailsPage() {
 
   const fetchCalls = async () => {
     try {
-      const res = await fetch(`http://localhost:7000/api/v1/calls/${id}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/calls/${id}`);
       const data = await res.json();
 
       if (data.success) {
@@ -255,7 +255,7 @@ export default function TicketDetailsPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:7000/api/v1/tasks/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -294,7 +294,7 @@ export default function TicketDetailsPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:7000/api/v1/meetings/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/meetings/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -332,7 +332,7 @@ export default function TicketDetailsPage() {
   };
   const fetchActivity = async () => {
     try {
-      const res = await fetch(`http://localhost:7000/api/v1/activity/${id}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/activity/${id}`);
       const data = await res.json();
 
       console.log("ACTIVITY API RESPONSE:", data);
@@ -371,7 +371,7 @@ export default function TicketDetailsPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:7000/api/v1/tickets/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -450,7 +450,7 @@ export default function TicketDetailsPage() {
         return;
       }
 
-      const res = await fetch("http://localhost:7000/api/v1/meetings", {
+      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL}/api/v1/meetings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -570,7 +570,7 @@ export default function TicketDetailsPage() {
 
       const assignedUsers = isAdmin ? taskAssignedTo : [user.id];
 
-      const res = await fetch("http://localhost:7000/api/v1/tasks", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -623,7 +623,7 @@ export default function TicketDetailsPage() {
       await fetchActivity();
 
       // get latest call
-      const res = await fetch(`http://localhost:7000/api/v1/calls/${id}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/calls/${id}`);
       const data = await res.json();
 
       if (data.success && data.data?.length > 0) {
@@ -663,7 +663,7 @@ export default function TicketDetailsPage() {
         return;
       }
 
-      const res = await fetch("http://localhost:7000/api/v1/calls", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/calls`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -757,7 +757,7 @@ export default function TicketDetailsPage() {
       setLiveCallStatus("calling");
       setLiveCallDuration(0);
 
-      const res = await fetch("http://localhost:7000/api/v1/calls/make-call", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/calls/make-call`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -798,7 +798,7 @@ export default function TicketDetailsPage() {
       if (!liveCallSid) return;
 
       const res = await fetch(
-        `http://localhost:7000/api/v1/calls/end-call/${liveCallSid}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/calls/end-call/${liveCallSid}`,
         {
           method: "POST",
         }
@@ -833,7 +833,7 @@ export default function TicketDetailsPage() {
         return;
       }
 
-      const res = await fetch("http://localhost:7000/api/v1/notes", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -899,7 +899,7 @@ export default function TicketDetailsPage() {
         formData.append("attachments", file);
       });
 
-      const res = await fetch("http://localhost:7000/api/v1/emails", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/emails`, {
         method: "POST",
         body: formData,
       });
@@ -950,7 +950,7 @@ export default function TicketDetailsPage() {
   );
   const handleDeleteAttachment = async (id) => {
     try {
-      await fetch(`http://localhost:7000/api/attachments/${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/attachments/${id}`, {
         method: "DELETE",
       });
 
@@ -2168,7 +2168,7 @@ export default function TicketDetailsPage() {
                   <div>
                     📎{" "}
                     <a
-                      href={`http://localhost:7000/${file.file_path}`}
+                      href={`${process.env.NEXT_PUBLIC_API_URL}/${file.file_path}`}
                       target="_blank"
                       style={{ color: "#6366f1", textDecoration: "none" }}
                     >

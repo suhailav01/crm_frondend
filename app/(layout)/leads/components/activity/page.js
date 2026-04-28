@@ -10,7 +10,7 @@ import {
   CheckCircle,
   Circle
 } from "lucide-react";
-const API = "http://localhost:7000";
+const API = `${process.env.NEXT_PUBLIC_API_URL}`;
 
 export default function LeadActivityTimeline({ leadId, searchTerm = "" }) {
   const [activities, setActivities] = useState([]);
@@ -31,11 +31,11 @@ export default function LeadActivityTimeline({ leadId, searchTerm = "" }) {
           notesRes,
           tasksRes,
         ] = await Promise.all([
-          fetch(`${API}/api/v1/lead-calls/${leadId}`),
-          fetch(`${API}/api/v1/lead-emails/${leadId}`),
-          fetch(`${API}/api/v1/lead-meetings/${leadId}`),
-          fetch(`${API}/api/v1/leads-notes/${leadId}`),
-          fetch(`${API}/api/v1/lead-tasks/${leadId}`),
+          fetch(`${API}/lead-calls/${leadId}`),
+          fetch(`${API}/lead-emails/${leadId}`),
+          fetch(`${API}/lead-meetings/${leadId}`),
+          fetch(`${API}/leads-notes/${leadId}`),
+          fetch(`${API}/lead-tasks/${leadId}`),
         ]);
 
         const [

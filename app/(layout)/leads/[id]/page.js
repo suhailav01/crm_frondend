@@ -63,7 +63,7 @@ export default function LeadDetailsPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:7000/api/v1/companies", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/companies`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -90,16 +90,22 @@ export default function LeadDetailsPage() {
     const fetchLeadOwners = async () => {
       try {
         const token = localStorage.getItem("token");
+        console.log("TOKEN 👉", token);
 
-        const res = await fetch("http://localhost:7000/api/auth/signup/users", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup/users`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        const data = await res.json();
+        const text = await res.text();
+        console.log("RAW RESPONSE 👉", text);
+
+        const data = JSON.parse(text);
 
         if (data.success) {
           setLeadOwners(data.data || []);
@@ -119,7 +125,7 @@ export default function LeadDetailsPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:7000/api/auth/signup/users", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup/users`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -164,7 +170,7 @@ export default function LeadDetailsPage() {
     const fetchLead = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://localhost:7000/api/v1/leads/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -220,7 +226,7 @@ export default function LeadDetailsPage() {
         owners: (editedLead.owner_ids || []).map(Number),
       };
 
-      const res = await fetch(`http://localhost:7000/api/v1/leads/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -308,7 +314,7 @@ export default function LeadDetailsPage() {
         owners: dealForm.deal_owner_ids.map(Number),
       };
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:7000/api/v1/deals", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deals`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1004,7 +1010,7 @@ export default function LeadDetailsPage() {
                         {attachments.map((file, index) => {
                           const fileName = file.file_name || file.name || `file-${index}`;
                           const fileUrl = file.file_path
-                            ? `http://localhost:7000/${file.file_path}`
+                            ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${file.file_path}`
                             : URL.createObjectURL(file);
 
                           const imageFile = isImageFile(fileName);

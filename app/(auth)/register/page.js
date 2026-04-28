@@ -99,7 +99,7 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:7000/api/auth/signup", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

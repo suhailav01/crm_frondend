@@ -142,7 +142,7 @@ export default function Notes({ notes = [], onCreateNote = () => {} }) {
                         {note.attachments.map((file, i) => (
                           <img
                             key={i}
-                            src={`http://localhost:7000/${file.file_path}`}
+                            src={`${process.env.NEXT_PUBLIC_API_URL}/${file.file_path}`}
                             style={{
                               maxWidth: "200px",
                               borderRadius: "6px",
