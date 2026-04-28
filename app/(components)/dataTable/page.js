@@ -1,11 +1,11 @@
-const DataTable = ({ headers, data, renderRow }) => {
-  const headerStyle = { 
-    backgroundColor: "#5e4cf3", 
-    color: "white", 
-    border: "none", 
-    paddingTop: "15px", 
-    paddingBottom: "15px", 
-    fontWeight: "400" 
+const DataTable = ({ headers = [], data = [], renderRow = () => null }) => {
+  const headerStyle = {
+    backgroundColor: "#5e4cf3",
+    color: "white",
+    border: "none",
+    paddingTop: "15px",
+    paddingBottom: "15px",
+    fontWeight: "400"
   };
 
   return (
